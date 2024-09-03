@@ -12,6 +12,7 @@ import cors from "cors";
 import path from "path";
 import dotenv from "dotenv";
 import { fileURLToPath } from "url";
+import Product from "./models/product.js";
 
 dotenv.config();
 
@@ -34,8 +35,14 @@ const corsOptions = {
 /* app.options("*", cors(corsOptions)); // Preflight response for all routes
  */app.options(cors(corsOptions)); // Preflight response for all routes
 
-app.get('/', (req, res) => {
-  res.send('Hello World');
+ app.get('/', async (req, res) => {
+  try {
+    const result = await Product.find({}).limit(10); // Limiting the number of results
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    res.status(500).send('Server Error');
+  }
 });
 
 
