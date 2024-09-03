@@ -14,32 +14,32 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-app.use(bodyParser.json());
-app.use('/uploads/images', express.static(path.join('uploads', 'images')));
-
-/* app.use(express.json);
- */ const DATABASE_URL = process.env.DATABASE_URL;
-
- const allowedOrigins = [
-  'https://jumpsquad-frontend-szly.vercel.app',
-  'https://jumpsquad.vercel.app',
-  'http://localhost:5173'
+const allowedOrigins = [
+ 'https://jumpsquad-frontend-szly.vercel.app',
+ 'https://jumpsquad.vercel.app',
+ 'http://localhost:5173'
 ];
 
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: "GET, POST, PATCH, DELETE, PUT",
-  allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+ origin: function (origin, callback) {
+   if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+     callback(null, true);
+   } else {
+     callback(new Error('Not allowed by CORS'));
+   }
+ },
+ methods: "GET, POST, PATCH, DELETE, PUT",
+ allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization",
 };
 app.use(cors(corsOptions));
 
+/* app.use(express.json);
+*/ const DATABASE_URL = process.env.DATABASE_URL;
 
+
+
+app.use(bodyParser.json());
+app.use('/uploads/images', express.static(path.join('uploads', 'images')));
 
 // Use the routes
 app.use("/api/auth", authRoutes);
