@@ -14,24 +14,13 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-const allowedOrigins = [
- 'https://jumpsquad-frontend-szly.vercel.app',
- 'https://jumpsquad.vercel.app',
- 'http://localhost:5173'
-];
-
 const corsOptions = {
- origin: function (origin, callback) {
-   if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-     callback(null, true);
-   } else {
-     callback(new Error('Not allowed by CORS'));
-   }
- },
- methods: "GET, POST, PATCH, DELETE, PUT",
- allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+  origin: '*', // This allows requests from any origin
+  methods: "GET, POST, PATCH, DELETE, PUT",
+  allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization",
 };
-app.use(cors(corsOptions));
+/* app.use(cors(corsOptions));
+ */app.options('*', cors(corsOptions)); // Preflight response for all routes
 
 /* app.use(express.json);
 */ const DATABASE_URL = process.env.DATABASE_URL;
