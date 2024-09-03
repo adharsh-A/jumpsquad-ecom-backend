@@ -11,27 +11,30 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import path from "path";
 import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+
 dotenv.config();
 
 const app = express();
+app.use(express.json);
 // Get the current directory name
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const corsOptions = {
-  origin: ['https://jumpsquad-frontend.vercel.app', 'http://localhost:5173'],
+  origin: ["https://jumpsquad-frontend.vercel.app", "http://localhost:5173"],
   methods: "GET, POST, PATCH, DELETE, PUT",
-  allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+  allowedHeaders:
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization",
 };
-
-/* app.use(cors(corsOptions));
- */app.options('*', cors(corsOptions)); // Preflight response for all routes
-
-/* app.use(express.json);
+/* 
+ app.use(cors(corsOptions));
+  app.use(bodyParser.json());
  */
-
-app.use(bodyParser.json());
-app.use('/uploads/images', express.static(path.join(__dirname, 'uploads', 'images')));
-
+app.options("*", cors(corsOptions)); // Preflight response for all routes
+app.use(
+  "/uploads/images",
+  express.static(path.join(__dirname, "uploads", "images"))
+);
 
 // Use the routes
 app.use("/api/auth", authRoutes);
