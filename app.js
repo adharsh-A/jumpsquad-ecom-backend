@@ -28,10 +28,16 @@ const corsOptions = {
 };
 /* 
  app.use(cors(corsOptions));
- 
+
   app.use(bodyParser.json());
  */
 app.options("*", cors(corsOptions)); // Preflight response for all routes
+
+app.get('/', (req, res) => {
+  res.send('Hello World');
+});
+
+
 app.use(
   "/uploads/images",
   express.static(path.join(__dirname, "uploads", "images"))
