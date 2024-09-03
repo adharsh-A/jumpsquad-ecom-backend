@@ -38,7 +38,7 @@ const corsOptions = {
  app.get('/', async (req, res) => {
   try {
     const result = await Product.find({}).limit(10); // Limiting the number of results
-    res.status(200).json(result);
+    res.status(200).json({products: result.map(product =>  product.toObject({ getters: true }))});
   } catch (error) {
     console.error('Error fetching data:', error);
     res.status(500).send('Server Error');
