@@ -22,6 +22,7 @@ export const addProduct = async (req, res, next) => {
   try {
     // Destructure the request body to get product details
     const { title, price, description, category} = req.body;
+    const image = req.file; // Handle the uploaded file
 
     // Validate required fields
     if (!title || !price ) {
@@ -36,7 +37,7 @@ export const addProduct = async (req, res, next) => {
       price,
       description,
       category,
-      image: req.file.path,
+      image: image ? image.path : null, // Save the image path if uploaded
         });
 
     // Save the product to the database

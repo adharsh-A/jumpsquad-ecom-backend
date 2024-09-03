@@ -1,4 +1,5 @@
 import multer from "multer";
+import path from "path";
 import { v1 as uuid } from "uuid";
 
 const MIME_TYPE_MAP = {
