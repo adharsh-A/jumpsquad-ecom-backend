@@ -19,17 +19,17 @@ export const getProductsById = async (req, res, next) => {
 
 export const addProduct = async (req, res, next) => {
   console.log('Uploaded file:', req.file); 
-  try {
-    // Destructure the request body to get product details
-    const { title, price, description, category} = req.body;
-    const image = req.file; // Handle the uploaded file
+  // Destructure the request body to get product details
+  const { title, price, description, category} = req.body;
+  const image = req.file; // Handle the uploaded file
 
-    // Validate required fields
-    if (!title || !price ) {
-      return res
-        .status(400)
-        .json({ message: "All fields except image are required" });
-    }
+  // Validate required fields
+  if (!title || !price ) {
+    return res
+      .status(400)
+      .json({ message: "All fields except image are required" });
+  }
+  try {
 
     // Create a new product
     const newProduct = new Product({
@@ -53,6 +53,7 @@ export const addProduct = async (req, res, next) => {
 res.status(400).json({
   message: "Product Never Added" 
 });
+return next(new HttpError("Product Never Added", 500));
   }
 };
 
