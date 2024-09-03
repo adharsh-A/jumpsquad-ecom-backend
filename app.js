@@ -31,7 +31,8 @@ const corsOptions = {
 
   app.use(bodyParser.json());
  */
-app.options("*", cors(corsOptions)); // Preflight response for all routes
+/* app.options("*", cors(corsOptions)); // Preflight response for all routes
+ */app.options(cors(corsOptions)); // Preflight response for all routes
 
 app.get('/', (req, res) => {
   res.send('Hello World');
