@@ -11,7 +11,7 @@ export const isAuthenticatedUser = async (req, res, next) => {
     if (!token) {
       throw new Error('Authentication failed!');
     }
-    const decodedToken = jwt.verify(token, 'supersecret_dont_share');
+    const decodedToken = jwt.verify(token, process.env.JWT_KEY);
     req.user = { userId: decodedToken.userId,role: decodedToken.role };
     next();
   } catch (err) {
