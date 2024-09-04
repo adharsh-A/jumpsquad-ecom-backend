@@ -1,5 +1,5 @@
 import app  from "./app.js";
-import connectDB from "./db/connectDB.js";
+import connectDB from "./config/connectDB.js";
 
 
 // Handling Uncaught Exception
@@ -20,9 +20,10 @@ connectDB(process.env.DATABASE_URL);
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 }); */
+const port = process.env.PORT || 8080;
 
-const server = app.listen(process.env.PORT || 5000, () => {
-  console.log(`Server is working on http://localhost:${process.env.PORT}`);
+const server = app.listen(port, () => {
+  console.log(`Server is working on http://localhost:${port}`);
 });
 
 // Unhandled Promise Rejection

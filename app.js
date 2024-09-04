@@ -12,57 +12,57 @@ import cors from "cors";
 import path from "path";
 import dotenv from "dotenv";
 import { fileURLToPath } from "url";
-import Product from "./models/product.js";
 
 dotenv.config();
 
 const app = express();
-app.use(express.json);
+
+// CORS configuration
+const corsOptions = {
+  origin: "*", // Allows all origins
+  methods: "GET, POST, PATCH, DELETE, PUT",
+  allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+};
+
+app.use(cors(corsOptions));
+app.use(express.json());
+
 // Get the current directory name
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const corsOptions = {
-  origin: ["https://jumpsquad-frontend.vercel.app", "http://localhost:5173"],
-  methods: "GET, POST, PATCH, DELETE, PUT",
-  allowedHeaders:
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization",
-};
-/* 
- app.use(cors(corsOptions));
 
-  app.use(bodyParser.json());
- */
-/* app.options("*", cors(corsOptions)); // Preflight response for all routes
- */app.options(cors(corsOptions)); // Preflight response for all routes
-
- app.get('/', async (req, res) => {
-  try {
-    const result = await Product.find({}).limit(10); // Limiting the number of results
-    res.status(200).json({products: result.map(product =>  product.toObject({ getters: true }))});
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    res.status(500).send('Server Error');
-  }
-});
-
-
+// Static file serving
 app.use(
   "/uploads/images",
   express.static(path.join(__dirname, "uploads", "images"))
 );
 
 // Use the routes
+app.get('/', (req, res) => {
+  res.send("Hello World!");
+});
+
+app.get('/test', (req, res) => {
+  res.send('Test endpoint is working');
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/cart", cartRoutes);
-/* app.use('/api/orders', orderRoutes); 
+/* Uncomment and define these routes if needed
+app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
-app.use('/api/wishlist', wishlistRoutes); */
+app.use('/api/wishlist', wishlistRoutes);
+*/
+
+// 404 Error handling
 app.use((req, res, next) => {
   const error = new HttpError("Could not find this route.", 404);
   throw error;
 });
+
+// Global error handling
 app.use((error, req, res, next) => {
   if (req.file) {
     fs.unlink(req.file.path, (err) => {
@@ -75,4 +75,5 @@ app.use((error, req, res, next) => {
   res.status(error.code || 500);
   res.json({ message: error.message || "An unknown error occurred!" });
 });
+
 export default app;
