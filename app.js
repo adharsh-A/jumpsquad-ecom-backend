@@ -23,7 +23,8 @@ const corsOptions = {
   methods: "GET, POST, PATCH, DELETE, PUT",
   allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization",
 };
-
+// Handle preflight requests for all routes
+app.options('*', cors()); // This enables the server to respond to the preflight requests with appropriate CORS headers
 app.use(cors(corsOptions));
 
 // Get the current directory name
