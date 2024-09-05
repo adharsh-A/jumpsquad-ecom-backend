@@ -62,7 +62,7 @@ app.use('/api/wishlist', wishlistRoutes);
 // 404 Error handling
 app.use((req, res, next) => {
   const error = new HttpError("Could not find this route.", 404);
-  throw error;
+  return next(error);
 });
 
 // Global error handling
