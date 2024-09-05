@@ -7,7 +7,6 @@ import cartRoutes from "./routes/cartRoutes.js";
 // import orderRoutes from "./routes/orderRoutes.js";
 // import paymentRoutes from "./routes/paymentRoutes.js";
 // import wishlistRoutes from "./routes/wishlistRoutes.js";
-import bodyParser from "body-parser";
 import cors from "cors";
 import path from "path";
 import dotenv from "dotenv";
@@ -16,6 +15,7 @@ import { fileURLToPath } from "url";
 dotenv.config();
 
 const app = express();
+app.use(express.json());
 
 // CORS configuration
 const corsOptions = {
@@ -25,7 +25,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(express.json());
 
 // Get the current directory name
 const __filename = fileURLToPath(import.meta.url);
@@ -64,6 +63,7 @@ app.use((req, res, next) => {
 
 // Global error handling
 app.use((error, req, res, next) => {
+  console.error(error);
   if (req.file) {
     fs.unlink(req.file.path, (err) => {
       console.log(err);

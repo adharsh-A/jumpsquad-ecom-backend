@@ -20,7 +20,7 @@ export const isAuthenticatedUser = async (req, res, next) => {
     }
     const decodedToken = jwt.verify(token, process.env.JWT_KEY);
     req.user = { userId: decodedToken.userId, role: decodedToken.role };
-
+    console.error("req.user:", req.user);
     next();
   } catch (err) {
     const error = new HttpError("Authentication failed!", 403);
