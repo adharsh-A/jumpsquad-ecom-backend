@@ -19,10 +19,11 @@ app.use(express.json());
 
 // CORS configuration
 const corsOptions = {
-  origin: ['https://jumpsquad.vercel.app'], // Allows all origins
-  methods: "GET, POST, PATCH, DELETE, PUT,OPTIONS",
-  allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+  origin: 'https://jumpsquad.vercel.app', // Allows this specific origin
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT', 'OPTIONS'],
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
 };
+
 // Handle preflight requests for all routes
 app.options('*', cors()); // This enables the server to respond to the preflight requests with appropriate CORS headers
 app.use(cors(corsOptions));
