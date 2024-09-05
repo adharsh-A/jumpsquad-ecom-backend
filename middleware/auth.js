@@ -14,6 +14,7 @@ export const isAuthenticatedUser = async (req, res, next) => {
       throw new HttpError("Authentication failed! Token missing.", 401);
     }
     const token = req.headers.authorization.split(" ")[1]; // Authorization: 'Bearer TOKEN'
+    console.log('Extracted Token:', token);
     if (!token) {
       throw new Error("Authentication failed!");
     }
