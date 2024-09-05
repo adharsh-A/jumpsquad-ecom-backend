@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
 export const signup = async (req, res, next) => {
-  const { username, password } = req.body;
+  const { username, password,role } = req.body;
 
   let existingUser;
   try {
