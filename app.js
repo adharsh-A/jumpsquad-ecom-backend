@@ -11,6 +11,7 @@ import cors from "cors";
 import path from "path";
 import dotenv from "dotenv";
 import { fileURLToPath } from "url";
+import HttpError from "./models/http-error.js";
 
 dotenv.config();
 
