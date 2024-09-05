@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
 export const signup = async (req, res, next) => {
-    const { username, password,role} = req.body;
+    const { username, password} = req.body;
 
     let existingUser;
     try {
@@ -110,12 +110,11 @@ export const signup = async (req, res, next) => {
     token = jwt.sign({
         username: existingUser.username,
         role: existingUser.role
-
     }
     , process.env.JWT_KEY,
      { expiresIn: '1h' });
   }catch(err){
-    return  next(new HttpError('Signing up failed, please try again later.', 500));
+    return  next(new HttpError('Logging in failed, please try again later.', 500));
   }
   res.status(201)
   .json({ userId: existingUser.id, 
