@@ -11,8 +11,7 @@ router.get(
   getAllProducts
 );
 router.get('/product/:id', getProductsById);
-
-router.post("/admin/add",uploadFileToS3,addProduct);
-router.post("/admin/add",fileUpload.single('image'),addProduct);
+router.post("/admin/add",uploadFileToS3,addProduct); 
+// router.post("/admin/add",fileUpload.single('image'),addProduct);
 
 export default router;

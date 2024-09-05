@@ -21,7 +21,8 @@ export const addProduct = async (req, res, next) => {
   console.log('Uploaded file:', req.file); 
   // Destructure the request body to get product details
   const { title, price, description, category} = req.body;
-  const image = req.file; // Handle the uploaded file
+  const { Location, Bucket, Key, ETag } = req.s3Data;
+    // const image = req.file; // Handle the uploaded file multer
 
   // Validate required fields
   if (!title || !price ) {
@@ -37,7 +38,7 @@ export const addProduct = async (req, res, next) => {
       price,
       description,
       category,
-      image: image ? image.path : null, // Save the image path if uploaded
+      image: Location ? Location :null, // Save the image path if uploaded
         });
 
     // Save the product to the database
