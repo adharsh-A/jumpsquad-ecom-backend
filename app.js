@@ -15,11 +15,12 @@ import { fileURLToPath } from "url";
 dotenv.config();
 
 const app = express();
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // CORS configuration
 const corsOptions = {
-  origin: 'https://jumpsquad.vercel.app', // Allows this specific origin
+  origin: ['https://jumpsquad.vercel.app','*'], // Allows this specific origin
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT', 'OPTIONS'],
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
 };
