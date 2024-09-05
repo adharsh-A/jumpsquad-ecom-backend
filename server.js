@@ -13,7 +13,10 @@ process.on("uncaughtException", (err) => {
 
 
 // Connecting to database
-connectDB(process.env.DATABASE_URL);
+connectDB(process.env.DATABASE_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 /* cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
