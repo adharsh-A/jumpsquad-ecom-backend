@@ -4,8 +4,8 @@ import { v1 as uuid } from "uuid";
 
 
 const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY,
-  secretAccessKey: process.env.AWS_SECRET_KEY,
+  accessKeyId: process.env.MY_ACCESS_KEY,
+  secretAccessKey: process.env.MY_SECRET_KEY,
 });
 
 // Set up multer to store files in memory
