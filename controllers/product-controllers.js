@@ -1,5 +1,8 @@
 import Product from "../models/product.js";
 import HttpError from "../models/http-error.js";
+import { v1 as uuid } from "uuid";
+import multer from "multer";
+
 
 export const getAllProducts = async (req, res, next) => {
   let products;
@@ -18,6 +21,7 @@ export const getProductsById = async (req, res, next) => {
 };
 
 export const addProduct = async (req, res, next) => {
+  console.log(req.body);
   console.log('Uploaded file:', req.file); 
   // Destructure the request body to get product details
   const { title, price, description, category} = req.body;
@@ -26,14 +30,16 @@ export const addProduct = async (req, res, next) => {
 
   // Validate required fields
   if (!title || !price ) {
+    console.error(title);
     return res
       .status(400)
       .json({ message: "All fields except image are required" });
   }
   try {
-
+    const newId = uuid(); 
     // Create a new product
     const newProduct = new Product({
+      productId: newId,
       title,
       price,
       description,
@@ -51,11 +57,13 @@ export const addProduct = async (req, res, next) => {
       product: newProduct,
     });
   } catch (error) {
-res.status(400).json({
-  message: "Product Never Added" 
-});
+console.log(error);
 return next(new HttpError("Product Never Added", 500));
   }
 };
+export const testProduct = async (req, res, next) => {
+console.log(" testProduct called");
+  res.send({ message: "Test endpoint is working" });
+}
 
-export default { getAllProducts, getProductsById, addProduct };
+export default { getAllProducts, getProductsById, addProduct, testProduct };

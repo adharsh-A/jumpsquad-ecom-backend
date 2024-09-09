@@ -1,6 +1,5 @@
 import HttpError from "../models/http-error.js";
 import jwt from "jsonwebtoken";
-import User from "../models/user.js";
 
 export const isAuthenticatedUser = async (req, res, next) => {
   if (req.method === "OPTIONS") {
@@ -19,7 +18,7 @@ export const isAuthenticatedUser = async (req, res, next) => {
       throw new Error("Authentication failed!");
     }
     const decodedToken = jwt.verify(token, process.env.JWT_KEY);
-    req.user = { userId: decodedToken.userId, role: decodedToken.role };
+    req.user = { userId: decodedToken.username, role: decodedToken.role };
     console.error("req.user:", req.user);
     next();
   } catch (err) {
@@ -30,9 +29,11 @@ export const isAuthenticatedUser = async (req, res, next) => {
 
 export const authorizeRoles = (...roles) => {
   return (req, res, next) => {
+
+    console.log("req.role:", req.user.role);
     if (!roles.includes(req.user.role)) {
       return next(
-        new ErrorHander(
+        new HttpError(
           `Role: ${req.user.role} is not allowed to access this resouce `,
           403
         )

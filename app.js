@@ -4,20 +4,19 @@ import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
-// import orderRoutes from "./routes/orderRoutes.js";
-// import paymentRoutes from "./routes/paymentRoutes.js";
-// import wishlistRoutes from "./routes/wishlistRoutes.js";
 import cors from "cors";
 import path from "path";
 import dotenv from "dotenv";
 import { fileURLToPath } from "url";
 import HttpError from "./models/http-error.js";
+import bodyParser from "body-parser";
 
 dotenv.config();
 
 const app = express();
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(bodyParser.json());
+app.use(express.json()); // For parsing JSON data
+app.use(express.urlencoded({ extended: true })); // For parsing URL-encoded data
 
 // CORS configuration
 const corsOptions = {
@@ -27,8 +26,8 @@ const corsOptions = {
 };
 
 // Handle preflight requests for all routes
-app.options('*', cors()); // This enables the server to respond to the preflight requests with appropriate CORS headers
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // This enables the server to respond to the preflight requests with appropriate CORS headers
 
 // Get the current directory name
 const __filename = fileURLToPath(import.meta.url);

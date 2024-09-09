@@ -19,7 +19,7 @@ export const uploadFileToS3 = (req, res, next) => {
       return res.status(500).json({ error: 'File upload failed' });
     }
     const uniqueFileName = `${uuid()}-${req.file.originalname}`;
-
+    
     // Define S3 upload parameters
     const params = {
       Bucket: process.env.S3_BUCKET_NAME,
@@ -27,14 +27,16 @@ export const uploadFileToS3 = (req, res, next) => {
       Body: req.file.buffer,
       ContentType: req.file.mimetype,
     };
-
+    
     // Upload the file to S3
     s3.upload(params, (error, data) => {
       if (error) {
+        console.log(error);
         return res.status(500).json({ error });
       }
       
       // Save the S3 response data to request for later use
+      console.log("it came here");
       req.s3Data = data;
       next(); // Proceed to the next middleware
     });

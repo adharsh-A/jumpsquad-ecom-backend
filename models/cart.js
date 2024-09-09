@@ -8,6 +8,12 @@ const cartItemSchema = new Schema({
     ref: "Product", // Assuming you have a Product model
     required: true,
   },
+  image:{
+    type: String
+  },
+  title: {
+    type: String
+  },
   quantity: {
     type: Number,
     required: true,
