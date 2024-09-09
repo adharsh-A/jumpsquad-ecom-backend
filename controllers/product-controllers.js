@@ -36,10 +36,8 @@ export const addProduct = async (req, res, next) => {
       .json({ message: "All fields except image are required" });
   }
   try {
-    const newId = uuid(); 
     // Create a new product
     const newProduct = new Product({
-      productId: newId,
       title,
       price,
       description,

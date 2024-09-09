@@ -8,6 +8,7 @@ const MIME_TYPE_MAP = {
   "image/jpg": "jpg",
 };
 
+
 export const fileUpload = multer({
   limits: { fileSize: 5000000 }, // Set appropriate file size limit
   storage: multer.diskStorage({
