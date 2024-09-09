@@ -1,17 +1,21 @@
 import Cart from "../models/cart.js";
 import HttpError from "../models/http-error.js";
 import mongoose from "mongoose";
-
 export const saveCart = async (req, res) => {
   const { userId, items, totalPrice } = req.body;
-  console.log("req.body.userId", userId);
 
+/*   console.log("req.body.userId", userId);
+ */
   // Find the cart for the user
   
   try {
     let cart = await Cart.findOne({ userId:userId });
+
     if (cart) {
       // If cart exists, merge the new items
+/*       cart.items.forEach((item) => {
+        console.log("cart items id", item.productId);
+      }) */
       req.body.items.forEach((newItem) => {
         if (!newItem.productId) {
           console.error(
@@ -21,15 +25,16 @@ export const saveCart = async (req, res) => {
           throw new Error("Validation failed: productId is required.");
         }
         const existingItem = cart.items.find(
-          (item) => item.productId === newItem.productId
+          (item) =>{
+            let objectToS=item.productId.toString();
+            return objectToS === newItem.productId
+
+          } 
         );
 
         if (existingItem) {
           // Update quantity if the product already exists
-          existingItem.quantity = Math.max(
-            existingItem.quantity + newItem.quantity,
-            1
-          );
+          existingItem.quantity = Math.max(newItem.quantity,1);
         } else {
           // Add the new product to the cart
           cart.items.push(newItem);

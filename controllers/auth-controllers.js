@@ -73,6 +73,7 @@ export const signup = async (req, res, next) => {
       new HttpError("Signing up failed, please try again later.", 500)
     );
   }
+  
   res
     .status(201)
     .json({ userId: createdUser.id, token: token, role: createdUser.role });
