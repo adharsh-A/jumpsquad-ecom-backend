@@ -40,6 +40,7 @@ export const signup = async (req, res, next) => {
       500
     );
     return next(error);
+
   }
 
   const createdUser = new User({
