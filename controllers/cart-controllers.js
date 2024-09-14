@@ -4,18 +4,25 @@ import mongoose from "mongoose";
 export const saveCart = async (req, res) => {
   const { userId, items, totalPrice } = req.body;
 
-/*   console.log("req.body.userId", userId);
- */
+  /*   console.log("req.body.userId", userId);
+   */
   // Find the cart for the user
-  
+
   try {
-    let cart = await Cart.findOne({ userId:userId });
+    let cart = await Cart.findOne({ userId: userId });
 
     if (cart) {
       // If cart exists, merge the new items
-/*       cart.items.forEach((item) => {
+      /*       cart.items.forEach((item) => {
         console.log("cart items id", item.productId);
       }) */
+      const itemIds = new Set(items.map((item) => item.productId.toString()));
+
+      // Remove items that are not in the new list
+      cart.items = cart.items.filter((cartItem) =>
+        itemIds.has(cartItem.productId.toString())
+      );
+
       req.body.items.forEach((newItem) => {
         if (!newItem.productId) {
           console.error(
@@ -24,17 +31,14 @@ export const saveCart = async (req, res) => {
           );
           throw new Error("Validation failed: productId is required.");
         }
-        const existingItem = cart.items.find(
-          (item) =>{
-            let objectToS=item.productId.toString();
-            return objectToS === newItem.productId
-
-          } 
-        );
+        const existingItem = cart.items.find((item) => {
+          let objectToS = item.productId.toString();
+          return objectToS === newItem.productId;
+        });
 
         if (existingItem) {
           // Update quantity if the product already exists
-          existingItem.quantity = Math.max(newItem.quantity,1);
+          existingItem.quantity = Math.max(newItem.quantity, 1);
         } else {
           // Add the new product to the cart
           cart.items.push(newItem);
@@ -76,7 +80,6 @@ export const deleteCart = async (req, res) => {
 export const getCart = async (req, res) => {
   const { userId } = req.body;
   console.log(userId);
-  console.log("from get userId:", userId);
 
   try {
     const cart = await Cart.findOne({ userId: userId });
@@ -99,23 +102,5 @@ export const getCart = async (req, res) => {
     res.status(500).json({ message: "Failed to get cart" });
   }
 };
-export const deleteItem = async (req, res) => {
-  const { userId, productId } = req.body;
 
-  try {
-    const cart = await Cart.findOneAndUpdate(
-      { userId: userId },
-      { $pull: { items: { productId: productId } } },
-      { new: true }
-    );
-
-    if (!cart) {
-      return res.status(404).json({ message: "Cart not found" });
-    }
-
-    res.status(200).json({ message: "Item deleted successfully" });
-  } catch (error) {
-    return next(new HttpError("Failed to delete item", 500));
-  }
-};
-export default { saveCart, deleteCart, getCart, deleteItem };
+export default { saveCart, deleteCart, getCart };

@@ -3,17 +3,18 @@ import HttpError from "../models/http-error.js";
 import { v1 as uuid } from "uuid";
 import multer from "multer";
 
-
 export const getAllProducts = async (req, res, next) => {
   let products;
   try {
-    products = await Product.find({})
-    
+    products = await Product.find({});
   } catch (e) {
-    return next(new HttpError("Fetching users failed, please try again later"
-      ,500));
+    return next(
+      new HttpError("Fetching users failed, please try again later", 500)
+    );
   }
-  res.json({ products: products.map(user => user.toObject({ getters: true })) });
+  res.json({
+    products: products.map((user) => user.toObject({ getters: true })),
+  });
 };
 export const getProductsById = async (req, res, next) => {
   const productId = req.params.id;
@@ -22,14 +23,14 @@ export const getProductsById = async (req, res, next) => {
 
 export const addProduct = async (req, res, next) => {
   console.log(req.body);
-  console.log('Uploaded file:', req.file); 
+  console.log("Uploaded file:", req.file);
   // Destructure the request body to get product details
-  const { title, price, description, category} = req.body;
+  const { title, price, description, category } = req.body;
   const { Location, Bucket, Key, ETag } = req.s3Data;
-    // const image = req.file; // Handle the uploaded file multer
+  // const image = req.file; // Handle the uploaded file multer
 
   // Validate required fields
-  if (!title || !price ) {
+  if (!title || !price) {
     console.error(title);
     return res
       .status(400)
@@ -42,8 +43,8 @@ export const addProduct = async (req, res, next) => {
       price,
       description,
       category,
-      image: Location ? Location :null, // Save the image path if uploaded
-        });
+      image: Location ? Location : null, // Save the image path if uploaded
+    });
 
     // Save the product to the database
     await newProduct.save();
@@ -55,13 +56,33 @@ export const addProduct = async (req, res, next) => {
       product: newProduct,
     });
   } catch (error) {
-console.log(error);
-return next(new HttpError("Product Never Added", 500));
+    console.log(error);
+    return next(new HttpError("Product Never Added", 500));
   }
 };
 export const testProduct = async (req, res, next) => {
-console.log(" testProduct called");
+  console.log(" testProduct called");
   res.send({ message: "Test endpoint is working" });
-}
+};
+export const updateProduct = async (req, res, next) => {
+  const productId = req.params.id;
+  const { title, price, description, category } = req.body;
+
+  const updatedProduct = await Product.findByIdAndUpdate(productId, {});
+
+  if (!updatedProduct) {
+    return next(new HttpError("Product not found", 404));
+  }
+
+  updatedProduct.title = title;
+  updatedProduct.price = price;
+  updatedProduct.description = description;
+  updatedProduct.category = category;
+  await updatedProduct.save();
+
+  res
+    .status(200)
+    .json({ message: "Product updated successfully", product: updatedProduct });
+};
 
 export default { getAllProducts, getProductsById, addProduct, testProduct };
