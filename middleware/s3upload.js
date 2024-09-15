@@ -18,7 +18,7 @@ export const uploadFileToS3 = (req, res, next) => {
     if (err) {
       return res.status(500).json({ error: 'File upload failed' });
     }
-    const uniqueFileName = `${uuid()}-${req.file.originalname}`;
+    const uniqueFileName = `${uuid()}`;
     
     // Define S3 upload parameters
     const params = {
