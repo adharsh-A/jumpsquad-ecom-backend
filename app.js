@@ -11,6 +11,7 @@ import dotenv from "dotenv";
 import { fileURLToPath } from "url";
 import HttpError from "./models/http-error.js";
 import bodyParser from "body-parser";
+import orderRoutes from "./routes/orderRoutes.js";
 
 dotenv.config();
 
@@ -54,8 +55,8 @@ app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/cart", cartRoutes);
 app.use('/api/wishlist', wishlistRoutes);
-/* Uncomment and define these routes if needed
 app.use('/api/orders', orderRoutes);
+/* Uncomment and define these routes if needed
 app.use('/api/payments', paymentRoutes);
 */
 
