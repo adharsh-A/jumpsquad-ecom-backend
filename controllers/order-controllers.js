@@ -78,12 +78,15 @@ export const verifyPayment = async (req, res) => {
       // Payment completed successfully
       const order = await Order.findOneAndUpdate(
         { orderID },
-        { status: "Paid" }
+        { status: "✅Paid" }
       );
       if (!order) {
         return res.status(404).json({ message: "Order not found" });
       }
-      const cart=await Cart.findOneAndUpdate({userId:order.userId},{$set:{items:[]}});
+      const cart = await Cart.findOneAndUpdate(
+        { userId: order.userId },
+        { $set: { items: [] } }
+      );
       if (!cart) {
         return res.status(404).json({ message: "Cart not found" });
       }
@@ -93,7 +96,7 @@ export const verifyPayment = async (req, res) => {
       // Payment not completed
       const order = await Order.findOneAndUpdate(
         { orderID },
-        { status: "Failed" }
+        { status: "❌Failed" }
       );
       if (!order) {
         return res.status(404).json({ message: "Order not found" });
@@ -104,7 +107,7 @@ export const verifyPayment = async (req, res) => {
     console.error("Error verifying payment:", error);
     const order = await Order.findOneAndUpdate(
       { orderID },
-      { status: "Failed" }
+      { status: "❌Failed" }
     );
     if (order) {
       await order.save();
@@ -112,4 +115,32 @@ export const verifyPayment = async (req, res) => {
     res.status(500).json({ message: "Error verifying payment" });
   }
 };
-export default { createOrder, verifyPayment };
+
+export const getOrders = async (req, res) => {
+  const { userId } = req.query;
+  const order = await Order.find({ userId: userId });
+  if (!order) {
+    return res.status(404).json({ message: "Order not found" });
+  }
+  console.log("order is sent");
+  const orderData = order.map((order) => {
+    return {
+      orderId: order.orderID,
+      total: order.totalAmount,
+      status: order.status,
+      createdAt: order.createdAt.toISOString(),
+    };
+  })
+  res.status(200).json(orderData);
+};
+export const getOrderById = async (req, res) => {
+  const {orderId} = req.query;
+  const order = await Order.findOne({orderID: orderId});
+  if (!order) {
+    return res.status(404).json({ message: "Order not found" });
+  }
+  console.log("order is sent by id");
+console.log(order.items);
+  res.status(200).json(order.items);
+}
+export default { createOrder, verifyPayment , getOrders, getOrderById};

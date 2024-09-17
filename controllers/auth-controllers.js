@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
 export const signup = async (req, res, next) => {
-  const { username, password,role } = req.body;
+  const { username, password, role } = req.body;
 
   let existingUser;
   try {
@@ -40,7 +40,6 @@ export const signup = async (req, res, next) => {
       500
     );
     return next(error);
-
   }
 
   const createdUser = new User({
@@ -74,7 +73,7 @@ export const signup = async (req, res, next) => {
       new HttpError("Signing up failed, please try again later.", 500)
     );
   }
-  
+
   res
     .status(201)
     .json({ userId: createdUser.id, token: token, role: createdUser.role });
@@ -105,9 +104,7 @@ export const login = async (req, res, next) => {
   try {
     isValidPassword = await bcrypt.compare(password, existingUser.password);
   } catch (err) {
-    return next(
-      new HttpError("Could not log you in, please check your credentials.", 500)
-    );
+    return next(err);
   }
   if (!isValidPassword) {
     return next(new HttpError("Invalid Password.", 403));

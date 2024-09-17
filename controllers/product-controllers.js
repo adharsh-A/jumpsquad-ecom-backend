@@ -8,9 +8,7 @@ export const getAllProducts = async (req, res, next) => {
   try {
     products = await Product.find({});
   } catch (e) {
-    return next(
-      new HttpError("Fetching users failed, please try again later", 500)
-    );
+    return next(e);
   }
   res.json({
     products: products.map((user) => user.toObject({ getters: true })),
