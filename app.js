@@ -12,6 +12,7 @@ import { fileURLToPath } from "url";
 import HttpError from "./models/http-error.js";
 import bodyParser from "body-parser";
 import orderRoutes from "./routes/orderRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 
 dotenv.config();
 
@@ -56,6 +57,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/cart", cartRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/orders', orderRoutes);
+app.use("/api/admin", adminRoutes);
 /* Uncomment and define these routes if needed
 app.use('/api/payments', paymentRoutes);
 */
