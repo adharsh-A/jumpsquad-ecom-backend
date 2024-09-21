@@ -8,7 +8,7 @@ const s3 = new AWS.S3({
 });
 
 // Set up multer to store files in memory
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({ storage: multer.memoryStorage() , limits: { fileSize: 5 * 1024 * 1024 }});
 
 // Middleware function for uploading to S3
 export const uploadFileToS3 = (req, res, next) => {
