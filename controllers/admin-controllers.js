@@ -17,31 +17,27 @@ export const getDashboard = async (req, res) => {
             },
           },
         ]),
+
         User.distinct("userId").countDocuments(),
         Product.distinct("productId").countDocuments(),
       ]);
-
+    const ordersArray = await Order.find({});
+    const usersArray = await User.find({});
+    const productsArray = await Product.find({});
     const grandTotal = totalCompletedOrders[0]?.total || 0;
     const avgOrderValue = (
       ordersCount > 0 ? grandTotal / ordersCount : 0
     ).toFixed(2);
 
-      const response = await axios.get(
-        "https://jumpsquad.vercel.app/_vercel/insights/view",
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.VERCEL_ANALYTICS_TOKEN}`, // Replace with your actual API token if needed
-          },
-        }
-      );
-      const analyticsData = response.data;
-      console.log("Analytics data:", analyticsData);
     res.status(200).json({
       ordersCount,
       grandTotal,
       avgOrderValue,
       totalUsers,
       totalProducts,
+      orders: ordersArray,
+      users: usersArray,
+      products: productsArray,
     });
   } catch (error) {
     console.error(error);

@@ -3,15 +3,27 @@ import HttpError from "../models/http-error.js";
 import { v1 as uuid } from "uuid";
 import multer from "multer";
 
+import NodeCache from "node-cache";
+const myCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
+
 export const getAllProducts = async (req, res, next) => {
+  const cachedData = myCache.get("dataKey");
+  if (cachedData) {
+     return res.json({
+      products: cachedData,
+    });
+  }
   let products;
   try {
     products = await Product.find({});
   } catch (e) {
     return next(e);
   }
+  const actualData= products.map((user) => user.toObject({ getters: true }))
+  myCache.set("dataKey", actualData);
+  console.log("from fetched")
   res.json({
-    products: products.map((user) => user.toObject({ getters: true })),
+    products: actualData,
   });
 };
 export const getProductsById = async (req, res, next) => {
